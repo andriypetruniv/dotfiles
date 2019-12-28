@@ -1,0 +1,49 @@
+[alias]
+  aa = add .
+  b = "!git for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) | %(authorname) | (%(color:green)%(c\
+ommitterdate:relative)%(color:reset))| %(contents:subject) ' | column -t -s '|'"
+  br = branch
+  browse = "!hub browse"
+  ca = commit --amend
+  car = commit --amend --no-edit
+  ci = commit
+  co = checkout
+  compare = "!hub compare"
+  create = "!hub create"
+  dc = diff --cached
+  dm = diff --patience master
+  dump = cat-file -p
+  full-commit = cat-file -p HEAD
+  glog = log -E -i --grep
+  hist = log --pretty=format:'%C(yellow)%h%C(reset) %ad | %s%C(blue)%d%C(reset) %C(green)[%an]%C(reset)' --graph --all --date=short
+# hist = log --pretty=format:'%C(yellow)%h%C(reset) %ad (%ar) | %s%C(blue)%d%C(reset) %C(green)[%an]%C(reset)' --graph --all --date=short
+  i = init
+  master = checkout master
+  mup = !git checkout master && git pull && git checkout -
+  pl = pull
+  pom = push -u origin master
+  praise = blame
+  prq = "!hub pull-request"
+  ps = push
+  ri = rebase -i
+  sla = log --oneline --decorate --graph --all
+  st = status
+  staged = diff --cached
+  squash = rebase -i master
+  type = cat-file -t
+  unstage = reset
+  uncommit = reset --soft HEAD^
+[color]
+  ui = auto
+[commit]
+  template = ~/.gitmessage
+[core]
+	autocrlf = input
+	safecrlf = true
+[github]
+  user = andriypetruniv
+[push]
+	default = matching
+[user]
+	name = Andriy Petruniv
+	email = andrew.petruniv.15@gmail.com

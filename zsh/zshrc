@@ -1,0 +1,120 @@
+# Path to your oh-my-zsh installation.
+export ZSH="/home/andrew/.oh-my-zsh"
+
+ZSH_THEME="cjt"
+
+setopt auto_cd
+cdpath=($HOME/try $HOME/code $HOME/learn)
+
+export EDITOR='nvim'
+
+# plugins=(git rails zsh-syntax-highlighting)
+plugins=(
+  bundler
+  rake
+  ruby
+  zsh-syntax-highlighting
+)
+
+
+source $ZSH/oh-my-zsh.sh
+
+
+# Autostart tmux in teminal; two variants, seems second one is better
+# Launch tmux on terminal startup
+: <<'END'
+if command -v tmux>/dev/null; then
+ [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && tmux
+fi
+END
+
+
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+    tmux attach -t default || tmux new -s default
+fi
+
+
+# Show contents of directory after cd-ing into it
+# chpwd() {
+#   ls -lrthG
+# }
+
+
+alias v="nvim"
+alias vim="nvim"
+
+alias t='tmux'
+
+alias notes='vim learn/notes'
+
+
+alias soz='source ~/.zshrc; echo ".zshrc successfully sourced"'
+
+
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias rm='rm -iv'
+# alias ls='ls -FGh'
+
+alias \$=''
+
+alias cl='clear'
+
+# alias dotfiles='~/.dotfiles'
+alias dotfiles='~/code/dotfiles'
+
+
+alias h='hub'
+
+alias r='rubocop'
+
+# alias vimdiff="nvim -d"
+
+
+# Some Rails aliases
+alias bb='bundle'
+alias be='bundle exec'
+alias bo='bundle open'
+
+alias b='bin/rspec'
+alias ss='spring stop'
+
+alias rs='rails server'
+alias rc='rails console'
+alias rg='rails generate'
+alias rgc='rails generate controller'
+alias rgm='rails generate model'
+alias rgmi='rails generate migration'
+
+alias rdc='rake db:create'
+alias rdm='rake db:migrate'
+alias rdr='rake db:rollback'
+alias rdd='rake db:drop'
+alias rds='rake db:setup'
+alias rdse='rake db:seed'
+
+alias rr='rake routes'
+alias rrg='rake routes | grep'
+
+# No arguments: `git status`
+# With arguments: acts like `git`
+g() {
+  if [[ $# > 0 ]]; then
+    git $@
+  else
+    git status --short
+  fi
+}
+
+# Complete g like git
+compdef g=git
+
+
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
