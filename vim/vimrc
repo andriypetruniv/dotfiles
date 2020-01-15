@@ -18,6 +18,13 @@ Plug 'airblade/vim-gitgutter'                  " Git diff
 Plug 'tmux-plugins/vim-tmux-focus-events'      " Proper autoread files
 Plug 'tpope/vim-unimpaired'                    " Insert empty new lines from normal mode (and much more; explore later)
 
+" Plug 'vim-syntastic/syntastic'                 " Syntax checking hacks for vim
+
+" Plug 'chriskempson/base16-vim'
+" Plug 'nanotech/jellybeans.vim'
+
+Plug 'slim-template/vim-slim'
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }         " Fuzzy-finder
 Plug 'junegunn/fzf.vim'
@@ -36,6 +43,9 @@ syntax on
 syntax enable
 filetype plugin indent on            " Enable indentation rules that are file-type specific
 
+" colorscheme base16-ocean
+" set termguicolors
+" colorscheme jellybeans
 colorscheme itg_flat_transparent
 
 " colorscheme gruvbox-material
@@ -44,6 +54,7 @@ colorscheme itg_flat_transparent
 " set background=dark
 " let g:airline_theme = 'gruvbox_material'
 
+" let g:airline_theme='base16'
 let g:airline_theme='jellybeans'
 let g:airline#extensions#tabline#enabled = 1
 
@@ -227,6 +238,16 @@ au InsertLeave * let &updatetime=updaterestore
 
 map <Leader>f :FixWhitespace<cr>
 
+" let g:syntastic_ruby_checkers = ['rubocop', 'mri']
+
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
 
 " ---------------------------------------------------------------
 " ---------------| General settings and mappings |---------------
