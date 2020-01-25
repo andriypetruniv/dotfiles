@@ -17,25 +17,20 @@ Plug 'chaoren/vim-wordmotion'                  " Expand vims' knowledge what cou
 Plug 'airblade/vim-gitgutter'                  " Git diff
 Plug 'tmux-plugins/vim-tmux-focus-events'      " Proper autoread files
 Plug 'tpope/vim-unimpaired'                    " Insert empty new lines from normal mode (and much more; explore later)
-
-" Plug 'vim-syntastic/syntastic'                 " Syntax checking hacks for vim
-
-" Plug 'chriskempson/base16-vim'
-" Plug 'nanotech/jellybeans.vim'
-
-Plug 'slim-template/vim-slim'
+Plug 'christoomey/vim-sort-motion'             " No more sorting manually, yay!
+Plug 'christoomey/vim-system-copy'             " Copying to the system clipboard with text-objects and motions
+Plug 'slim-template/vim-slim'                  " Slim syntax highlighting for vim
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }         " Fuzzy-finder
 Plug 'junegunn/fzf.vim'
 
-
+" Plug 'chriskempson/base16-vim'
 " Plug 'sainnhe/gruvbox-material'
+" Plug 'nanotech/jellybeans.vim'
 
-
+" Plug 'vim-syntastic/syntastic'                 " Syntax checking hacks for vim
 " Plug 'christoomey/vim-tmux-runner'
-" Plug 'tpope/vim-dispatch'
-" Plug 'jgdavey/tslime.vim'                  " Send command from vim to a running tmux session
 
 call plug#end()
 
@@ -63,6 +58,12 @@ runtime macros/matchit.vim
 
 let mapleader = " "
 
+set nocompatible              " Don't maintain compatibility with Vi
+set history=10000             " Remember last 10000 commands
+
+" set lazyredraw                " Don't update while executing a macros
+" set backspace=indent,eol,start "Sane backspace behavior
+
 set autoindent                " New lines inherit the indentation of previous lines
 set expandtab                 " Convert <tab> to spaces (2 or 4)
 set tabstop=2                 " Indent using two spaces per tab as default
@@ -87,12 +88,11 @@ set ttimeout                  " Eliminating delay on <esc> key; also usefull for
 set ttimeoutlen=0
 set timeoutlen=1000
 
+set shiftwidth=2              " Spaces per tab per filetype
 
-set shiftwidth=2
-" set colorcolumn=80
-" set cursorline
+set undofile                  " undofile - This allows you to use undos after exiting and restarting
+set undodir=~/.vim/undo/
 
-" :highlight Search guibg=black guifg=yellow gui=underline
 " ---------------
 " ---| Try | ----
 " ---------------
@@ -102,17 +102,6 @@ autocmd BufWritePost * GitGutter
 highlight GitGutterAdd    guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#bbbb00 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
-
-set undofile                  " undofile - This allows you to use undos after exiting and restarting
-set undodir=~/.vim/undo/
-
-" set foldmethod=marker
-" set nohidden
-" nnoremap <space> za
-
-" Trigger autoread when changing buffers inside while inside vim
-" autocmd FocusGained,BufEnter * :checktime
-
 
 " tmuxline.vim plugin settings
 " TODO: make it show battery_percentage
@@ -133,6 +122,16 @@ let g:tmuxline_preset = {
 " :Tmuxline airline
 " :TmuxlineSnapshot ~/.tmux-status.conf
 
+" Quick acccess to notes directory
+map <Leader>n :tabe ~/learn/notes<cr>
+map <Leader>tn :tabe ~/learn/notes<cr>
+map <Leader>vn :vsp ~/learn/notes<cr>
+
+
+" ---------------------------------------------------------------
+" ---------------| General settings and mappings |---------------
+" ---------------------------------------------------------------
+
 " Never ever use arrow keys
 noremap <Up>    <nop>
 noremap <Down>  <nop>
@@ -145,116 +144,15 @@ inoremap <Down>  <nop>
 inoremap <Left>  <nop>
 inoremap <Right> <nop>
 
-" Close the tab and delete the buffer
-map <Leader>q :bd<cr>
-
-
-" map <Leader>b :buffer
-
-
-nnoremap <silent> <Leader>p :Buffers<cr>
-
-
-" Quick acccess to notes directory
-map <Leader>n :tabe ~/learn/notes<cr>
-map <Leader>tn :tabe ~/learn/notes<cr>
-map <Leader>vn :vsp ~/learn/notes<cr>
-
-
-
-map <Leader>x :qall<cr>
-
-
-
-function! CreateDirectoryAskConfirmation(path, dir)
-    silent doautocmd BufWritePre
-
-    " Directory exists, :write and return
-    if isdirectory(a:dir)
-        execute 'write ' . a:path
-        silent doautocmd BufWritePost
-        return
-    endif
-
-    " Ask for confirmation to create this directory
-    echohl Question
-    echo "Create directory `" . a:dir . "' [y/N]?"
-    echohl None
-
-    let response = nr2char(getchar())
-    " mkdir() and :write if we want to make a directory
-    if response ==? "y"
-        call mkdir(a:dir, "p")
-        execute 'write ' . a:path
-        silent doautocmd BufWritePost
-    endif
-endfunction
-
-autocmd BufWriteCmd * call CreateDirectoryAskConfirmation(expand("<amatch>:p"), expand("<amatch>:p:h"))
-
-
-" RSpec.vim mappings
-map <Leader>t :call RunCurrentSpecFile()<cr>
-map <Leader>s :call RunNearestSpec()<cr>
-map <Leader>l :call RunLastSpec()<cr>
-map <Leader>a :call RunAllSpecs()<cr>
-
-let g:rspec_command = "!clear && bin/rspec {spec}"
-
-" let g:tslime_always_current_session = 1
-" let g:tslime_always_current_window = 1
-
-" let g:rspec_command = 'call Send_to_Tmux("!clear && bin/rspec {spec}\n")'
-" let g:rspec_command = 'Dispatch bin/rspec {spec}'
-
-" let g:rspec_command = 'call Send_to_Tmux("rspec {spec}\n")'
-
-" Should probably delete this one below
-" map <Leader>y :!rspec --drb %<cr>
-
-
-
-" RENAME CURRENT FILE (thanks Gary Bernhardt)
-
-function! RenameFile()
-  let old_name = expand('%')
-  let new_name = input('New file name: ', expand('%'), 'file')
-  if new_name != '' && new_name != old_name
-    exec ':saveas ' . new_name
-    exec ':silent !rm ' . old_name
-    redraw!
-  endif
-endfunction
-map <Leader>r :call RenameFile()<cr>
-
-
-" automatically leave insert mode after 'updatetime' milliseconds of inaction
-au CursorHoldI * stopinsert
-
-" set 'updatetime' to 15 seconds when in insert mode
-au InsertEnter * let updaterestore=&updatetime | set updatetime=15000
-au InsertLeave * let &updatetime=updaterestore
-
-
-map <Leader>f :FixWhitespace<cr>
-
-" let g:syntastic_ruby_checkers = ['rubocop', 'mri']
-
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
-
-" ---------------------------------------------------------------
-" ---------------| General settings and mappings |---------------
-" ---------------------------------------------------------------
-
 " Open netrw on vim load
 autocmd VimEnter * if !argc() | Explore | endif
+
+" Automatically leave insert mode after 'updatetime' milliseconds of inaction
+au CursorHoldI * stopinsert
+
+" Set 'updatetime' to 15 seconds when in insert mode
+au InsertEnter * let updaterestore=&updatetime | set updatetime=15000
+au InsertLeave * let &updatetime=updaterestore
 
 " Automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
@@ -268,12 +166,15 @@ map <Leader>git :tabe ~/.gitconfig<cr>
 map <Leader>zsh :tabe ~/.zshrc<cr>
 map <Leader>tmux :tabe ~/.tmux.conf<cr>
 
-" Fast access directories tree
-map <Leader>br :e.<cr>
-map <Leader>tb :tabe.<cr>
-
-" Fuzzy-finding my files
+" Fuzzy-finding files and buffers
 nnoremap <silent> <C-p> :FZF<cr>
+nnoremap <silent> <Leader>p :Buffers<cr>
+
+" Close the tab and delete the buffer
+map <Leader>q :bd<cr>
+
+" Quit fast
+map <Leader>x :qall<cr>
 
 " Clear the highlighting of previous search pattern matches
 nnoremap <silent><esc><esc> :noh<cr>
@@ -301,6 +202,59 @@ nmap k gk
 imap <c-e> <c-o>$
 imap <c-a> <c-o>^
 
+" Display extra whitespace
+set list listchars=tab:»·,trail:·
+
+" Indenting whole file and staying where you were
+map <Leader>i mmgg=G`m
+
+" Get rid of comments (only works if a line begins with '#' - should inprove)
+map <Leader>m :g/^#/d<cr>
+
+" Toggle colourcolumn
+map <Leader>cc :set cc=80<cr>
+map <Leader>dcc :set cc=<cr>
+
+" Rename current file
+function! RenameFile()
+  let old_name = expand('%')
+  let new_name = input('New file name: ', expand('%'), 'file')
+  if new_name != '' && new_name != old_name
+    exec ':saveas ' . new_name
+    exec ':silent !rm ' . old_name
+    redraw!
+  endif
+endfunction
+map <Leader>r :call RenameFile()<cr>
+
+" Create file in a directory (or a few nested directories) wich doesn't exist yet
+function! CreateDirectoryAskConfirmation(path, dir)
+    silent doautocmd BufWritePre
+
+    " Directory exists, :write and return
+    if isdirectory(a:dir)
+        execute 'write ' . a:path
+        silent doautocmd BufWritePost
+        return
+    endif
+
+    " Ask for confirmation to create this directory
+    echohl Question
+    echo "Create directory `" . a:dir . "' [y/N]?"
+    echohl None
+
+    let response = nr2char(getchar())
+    " mkdir() and :write if we want to make a directory
+    if response ==? "y"
+        call mkdir(a:dir, "p")
+        execute 'write ' . a:path
+        silent doautocmd BufWritePost
+    endif
+endfunction
+
+autocmd BufWriteCmd * call CreateDirectoryAskConfirmation(expand("<amatch>:p"), expand("<amatch>:p:h"))
+
+
 " -----------------------------------------------------------
 " ---- | Ruby and Rails specific settings and mappings | ----
 " -----------------------------------------------------------
@@ -325,13 +279,21 @@ map <Leader>tc :Tcontroller<cr>
 " Open the associated test file in a vertical split
 map <Leader>vu :AV<cr>
 
+" vim-rspec mappings
+map <Leader>t :call RunCurrentSpecFile()<cr>
+map <Leader>s :call RunNearestSpec()<cr>
+map <Leader>l :call RunLastSpec()<cr>
+map <Leader>a :call RunAllSpecs()<cr>
+
+let g:rspec_command = "!clear && bin/rspec {spec}"
+
 " vim-auto-save plugin settings
 let g:auto_save = 1                                               " Enable AutoSave on Vim startup
 let g:auto_save_silent = 1                                        " Do not display the auto-save notification
 let g:auto_save_events = ["InsertLeave", "TextChanged"]           " Save on every change in normal mode and every time after leaving insert mode
-" Wont allow undo and redo properly
-" let g:auto_save_presave_hook = 'FixWhitespace'                    " Strip trailing whitespaces by running :FixWhitespace before each save
 
+" vim-trailing-whitespace plugin settings
+map <Leader>f :FixWhitespace<cr>
 
 " https://github.com/neoclide/coc.nvim#example-vim-configuration
 " <TAB>: completion.
