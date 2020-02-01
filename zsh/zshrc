@@ -1,6 +1,8 @@
 # Path to your oh-my-zsh installation.
 export ZSH="/home/andrew/.oh-my-zsh"
 
+export FZF_DEFAULT_COMMAND='ag --ignore .git -g ""'
+
 ZSH_THEME="cjt"
 
 setopt auto_cd
@@ -33,6 +35,14 @@ if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
     tmux attach -t default || tmux new -s default
 fi
 
+: <<'END'
+if [ "$COLORTERM" = "gnome-terminal" -a "$TERM" =~ xterm.* ]; then
+    export TERM=gnome-256color
+fi
+END
+
+# 10ms for key sequences
+# KEYTIMEOUT=1
 
 # Show contents of directory after cd-ing into it
 # chpwd() {
@@ -55,8 +65,14 @@ alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -iv'
 # alias ls='ls -FGh'
+# alias du='du -cksh'
+# alias df='df -h'
 
+# Copy-pasting '$ something bla bla bla' works
 alias \$=''
+
+# Use modern regexps for sed
+# alias sed='sed -E'
 
 alias cl='clear'
 
@@ -81,6 +97,8 @@ alias ss='spring stop'
 
 alias rs='rails server'
 alias rc='rails console'
+alias rcs='rails console --sandbox'
+
 alias rg='rails generate'
 alias rgc='rails generate controller'
 alias rgm='rails generate model'
@@ -92,6 +110,7 @@ alias rdr='rake db:rollback'
 alias rdd='rake db:drop'
 alias rds='rake db:setup'
 alias rdse='rake db:seed'
+alias rdre='rake db:reset'
 
 alias rr='rake routes'
 alias rrg='rake routes | grep'
