@@ -7,6 +7,7 @@ ommitterdate:relative)%(color:reset))| %(contents:subject) ' | column -t -s '|'"
   ca = commit --amend
   car = commit --amend --no-edit
   ci = commit
+  cl = clone
   co = checkout
   compare = "!hub compare"
   create = "!hub create"
@@ -19,6 +20,7 @@ ommitterdate:relative)%(color:reset))| %(contents:subject) ' | column -t -s '|'"
 # hist = log --pretty=format:'%C(yellow)%h%C(reset) %ad (%ar) | %s%C(blue)%d%C(reset) %C(green)[%an]%C(reset)' --graph --all --date=short
   i = init
   master = checkout master
+  m = merge
   mup = !git checkout master && git pull && git checkout -
   pl = pull
   pom = push -u origin master
