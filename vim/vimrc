@@ -22,6 +22,7 @@ Plug 'christoomey/vim-system-copy'             " Copying to the system clipboard
 Plug 'slim-template/vim-slim'                  " Slim syntax highlighting for vim
 Plug 'mileszs/ack.vim'                         " Silver searcher
 
+Plug 'junegunn/vim-easy-align'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }         " Fuzzy-finder
@@ -270,6 +271,11 @@ map <Leader>vn :vsp ~/learn/notes<cr>
 " nnoremap <leader>o :only<cr>
 
 
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 
 
