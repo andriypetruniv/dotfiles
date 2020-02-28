@@ -8,6 +8,8 @@ ZSH_THEME="cjt"
 setopt auto_cd
 cdpath=($HOME/try $HOME/code $HOME/learn)
 
+export PATH="scripts:$PATH"
+
 export EDITOR='nvim'
 
 # plugins=(git rails zsh-syntax-highlighting)
@@ -140,3 +142,6 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+
+# Enable vim mode in zsh
+# bindkey -v

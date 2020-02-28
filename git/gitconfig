@@ -27,6 +27,7 @@ ommitterdate:relative)%(color:reset))| %(contents:subject) ' | column -t -s '|'"
   praise = blame
   prq = "!hub pull-request"
   ps = push
+  pscr = push -u origin HEAD
   ri = rebase -i
   sla = log --oneline --decorate --graph --all
   st = status

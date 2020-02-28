@@ -24,6 +24,8 @@ Plug 'mileszs/ack.vim'                         " Silver searcher
 
 Plug 'junegunn/vim-easy-align'
 
+Plug 'vim-scripts/copypath.vim'
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }         " Fuzzy-finder
 Plug 'junegunn/fzf.vim'
@@ -366,10 +368,17 @@ map <Leader>i mmgg=G`m
 
 " Get rid of comments (only works if a line begins with '#' - should inprove)
 map <Leader>m :g/^#/d<cr>
+" map <Leader>m :g/^\s+#/d<cr>
+
+" Delete all white spaces until first character
+map <Leader>y :g/^ /norm dw<cr>
 
 " Toggle colourcolumn
-map <Leader>cc :set cc=80<cr>
-map <Leader>dcc :set cc=<cr>
+" map <Leader>cc :set cc=80<cr>
+" map <Leader>dcc :set cc=<cr>
+
+map <Leader>cf :CopyFileName<cr>
+map <Leader>cp :CopyPath<cr>
 
 " Rename current file
 function! RenameFile()
@@ -422,7 +431,8 @@ autocmd BufWriteCmd * call CreateDirectoryAskConfirmation(expand("<amatch>:p"), 
 " -----------------------------------------------------------
 
 " Debugging
-nnoremap <leader>d orequire 'pry-byebug'; binding.pry<esc>
+" nnoremap <leader>d orequire 'pry-byebug'; binding.pry<esc>
+nnoremap <leader>d orequire 'byebug'; byebug<esc>
 
 map <Leader>sc :sp db/schema.rb<cr>
 
