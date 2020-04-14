@@ -8,6 +8,8 @@ ommitterdate:relative)%(color:reset))| %(contents:subject) ' | column -t -s '|'"
   car = commit --amend --no-edit
   ci = commit
   cl = clone
+  ; cleanup = "!git branch --merged | grep -v '\*\|master\|develop' | xargs -n 1 git branch -d"
+  cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 git branch -d"
   co = checkout
   compare = "!hub compare"
   create = "!hub create"
@@ -28,12 +30,14 @@ ommitterdate:relative)%(color:reset))| %(contents:subject) ' | column -t -s '|'"
   prq = "!hub pull-request"
   ps = push
   pscr = push -u origin HEAD
+  pscrf = push -u -f origin HEAD
   ri = rebase -i
   sla = log --oneline --decorate --graph --all
   st = status
   staged = diff --cached
   squash = rebase -i master
   type = cat-file -t
+  tracking = branch -vv
   unstage = reset
   uncommit = reset --soft HEAD^
 [color]
